@@ -73,7 +73,7 @@ describe("GET /api/topics", () => {
   })
 })
 
-describe("GET /api/articles:id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("200: Returned article matches the input id", () => {
     return request(app)
       .get("/api/articles/1")
@@ -111,6 +111,33 @@ describe("GET /api/articles:id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Not found")
+      })
+  })
+})
+
+describe("/api/articles/:article_id/comments", () => {
+  test("200: Returns with an array of comments", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeInstanceOf(Array)
+      })
+  })
+  test("200: Comments possess their required keys", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBeGreaterThan(0)
+        body.comments.forEach((comment) => {
+          expect(comment.comment_id).toEqual(expect.any(Number))
+          expect(comment.votes).toEqual(expect.any(Number))
+          expect(comment.created_at).toEqual(expect.any(String))
+          expect(comment.author).toEqual(expect.any(String))
+          expect(comment.body).toEqual(expect.any(String))
+          expect(comment.article_id).toEqual(expect.any(Number))
+        })
       })
   })
 })
