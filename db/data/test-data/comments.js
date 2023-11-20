@@ -125,4 +125,4 @@ module.exports = [
     article_id: 1,
     created_at: 1595294400000,
   },
-];
+]
