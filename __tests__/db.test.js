@@ -6,13 +6,13 @@ const request = require("supertest")
 
 beforeEach(() => seed(data))
 
-afterAll(() => {
-  db.end()
-})
+afterAll(() => db.end())
 
 describe("Errors", () => {
   test("404: Unknown url not found", () => {
-    return request(app).get("/api/toothpicks").expect(404)
+    return request(app).get("/api/toothpicks").expect(404).then(({body}) => {
+      expect(body.msg).toBe("Not found")
+    })
   })
 })
 

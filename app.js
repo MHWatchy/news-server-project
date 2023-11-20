@@ -11,9 +11,14 @@ const app = express()
 
 app.use(express.json())
 
+
 app.get("/api/topics", getTopics)
 
 app.get("/api/articles/:article_id", getArticleById)
+
+app.get("/*", (req, res, next) => {
+    res.status(404).send({msg: "Not found"})
+})
 
 app.use(handleCustom)
 app.use(handlePsql)
