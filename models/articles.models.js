@@ -15,3 +15,11 @@ exports.selectArticle = (id) => {
     }
   })
 }
+
+exports.selectAllArticles = () => {
+  let queryStr = "SELECT articles.*, count(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id "
+  const queryParams = []
+  return db.query(queryStr, queryParams).then((data) => {
+    return data.rows
+  })
+}
