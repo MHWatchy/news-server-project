@@ -1,14 +1,30 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "serves up a json representation of all the available endpoints of the api",
+    "queries": [],
+    "exampleResponse": {
+      "endpoints": {
+        "GET /api": {
+          "description": "serves up a json representation of all the available endpoints of the api",
+          "queries": [],
+          "exampleResponse": {
+            "endpoints": "etc..."
+          }
+        }
+      }
+    },
+    "exampleRequest": {}
   },
+
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
+    },
+    "exampleRequest": {}
   },
+
   "GET /api/articles": {
     "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
@@ -24,6 +40,7 @@
           "comment_count": 6
         }
       ]
-    }
+    },
+    "exampleRequest": {}
   }
 }
