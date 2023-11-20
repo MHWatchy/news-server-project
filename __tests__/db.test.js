@@ -46,7 +46,6 @@ describe("GET /api/articles:id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body)
         expect(body.article.article_id).toBe(1)
       })
   })
