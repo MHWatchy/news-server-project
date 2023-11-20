@@ -1,5 +1,9 @@
 const express = require("express")
-const { handleCustom, handlePsql, handleServer } = require("./controllers/errors.controllers")
+const {
+  handleCustom,
+  handlePsql,
+  handleServer,
+} = require("./controllers/errors.controllers")
 const { getTopics } = require("./controllers/topics.controllers")
 const { getArticleById } = require("./controllers/articles.controllers")
 
@@ -9,7 +13,7 @@ app.use(express.json())
 
 app.get("/api/topics", getTopics)
 
-app.get("/api/articles/:artist_id", getArticleById)
+app.get("/api/articles/:article_id", getArticleById)
 
 app.use(handleCustom)
 app.use(handlePsql)
