@@ -100,7 +100,22 @@ describe("GET /api/articles", () => {
         })
       })
   })
-
+  test("200: Returned articles should not possess a body property", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].body).not.toEqual(expect.any(String))
+      })
+  })
+  test("200: Articles are sorted by date in descending order by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true })
+      })
+  })
 })
 
 describe("GET /api/articles/:id", () => {
