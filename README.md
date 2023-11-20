@@ -1,3 +1,3 @@
-# Northcoders News API
+# Setup
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Create .env.development and .evn.test files in the root of this repo. .env.developmet should each set PGDATABASE to be whatever databases are used in ./db/setup.sql respectively. (currently nc_news for development, and nc_news_test for test)
