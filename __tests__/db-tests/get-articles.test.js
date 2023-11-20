@@ -11,11 +11,14 @@ afterAll(() => {
 })
 
 describe("GET /api/articles:id", () => {
-    test("Returns object the article matching the input id", () => {
-
-    })
+  xtest("Returns object the article matching the input id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body)
+      })
+  })
 })
 
-describe("errors", () => {
-
-})
+describe("errors", () => {})
