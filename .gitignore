@@ -1,2 +1,3 @@
 node_modules
 .env.*
+./__tests__/db-tests/db-tests-template.txt
