@@ -10,10 +10,10 @@ afterAll(() => {
   db.end()
 })
 
-describe("Functionality", () => {
+describe("Path", () => {
     
 })
 
-describe("Errors", () => {
+describe("errors", () => {
 
 })
