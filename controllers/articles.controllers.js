@@ -26,6 +26,6 @@ exports.patchArticleById = (req, res, next) => {
   const promises = [updateArticle(article_id, body), checkIdExists(article_id)]
   Promise.all(promises).then((results) => {
     const article = results[0]
-    res.status(200).send({article})
+    res.status(201).send({article})
   }).catch(next)
 }

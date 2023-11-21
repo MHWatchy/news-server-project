@@ -223,12 +223,12 @@ describe("/api/articles/:article_id/comments", () => {
 })
 
 describe("PATCH /api/articles/:article_id", () => {
-  test("200: Updates article by the determined increment of votes", () => {
+  test("201: Updates article by the determined increment of votes", () => {
     const input = { inc_votes: 10 }
     return request(app)
       .patch("/api/articles/3")
       .send(input)
-      .expect(200)
+      .expect(201)
       .then(({ body }) => {
         expect(body.article.votes).toBe(10)
       })
@@ -263,12 +263,12 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("200: Accepts input object with unnecessary keys given that the required one is present", () => {
+  test("201: Accepts input object with unnecessary keys given that the required one is present", () => {
     const input = { inc_votes: 10, somebody: "once", told: "me" }
     return request(app)
       .patch("/api/articles/2")
       .send(input)
-      .expect(200)
+      .expect(201)
       .then(({ body }) => {
         expect(body.article.votes).toBe(10)
       })
@@ -283,12 +283,12 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("200: Returns a vote count decremented", () => {
+  test("201: Returns a vote count decremented", () => {
     const input = { inc_votes: -10 }
     return request(app)
       .patch("/api/articles/2")
       .send(input)
-      .expect(200)
+      .expect(201)
       .then(({ body }) => {
         expect(body.article.votes).toBe(-10)
       })
