@@ -26,7 +26,7 @@
   },
 
   "GET /api/articles": {
-    "description": "serves an array of all articles",
+    "description": "serves an array of all articles, defaults to being sorted by date in descending order",
     "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
@@ -43,6 +43,7 @@
     },
     "exampleRequest": {}
   },
+
   "GET /api/articles/:articles_id": {
     "description": "serves an object of an article determined by article_id parameter",
     "queries": [],
@@ -60,6 +61,7 @@
     },
     "exampleRequest": {}
   },
+  
   "GET /api/articles/:articles_id/comments": {
     "description": "serves an array of comments posted to the article specified via article:id",
     "queries": [],

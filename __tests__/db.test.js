@@ -73,6 +73,54 @@ describe("GET /api/topics", () => {
   })
 })
 
+describe("GET /api/articles", () => {
+  test("200: Returned articles are in an array", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeInstanceOf(Array)
+      })
+  })
+  test("200: Returned articles possess the keys they are meant to", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBeGreaterThan(0)
+        body.articles.forEach((article) => {
+          expect(article.article_id).toEqual(expect.any(Number))
+          expect(article.title).toEqual(expect.any(String))
+          expect(article.topic).toEqual(expect.any(String))
+          expect(article.author).toEqual(expect.any(String))
+          expect(article.created_at).toEqual(expect.any(String))
+          expect(article.votes).toEqual(expect.any(Number))
+          expect(article.article_img_url).toEqual(expect.any(String))
+          expect(article.comment_count).toEqual(expect.any(String))
+        })
+      })
+  })
+  test("200: Returned articles should not possess a body property", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBeGreaterThan(0)
+        body.articles.forEach((article) => {
+          expect(article).not.toHaveProperty("body")
+        })
+      })
+  })
+  test("200: Articles are sorted by date in descending order by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true })
+      })
+  })
+})
+
 describe("GET /api/articles/:article_id", () => {
   test("200: Returned article matches the input id", () => {
     return request(app)
