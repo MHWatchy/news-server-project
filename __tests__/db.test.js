@@ -222,7 +222,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   })
 })
 
-describe.only("POST /api/articles/:article_id/comments", () => {
+describe("POST /api/articles/:article_id/comments", () => {
   test("Posting a comment returns how it looks in the table in the database", () => {
     const newComment = {
       username: "butter_bridge",
