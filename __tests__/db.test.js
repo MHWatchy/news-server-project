@@ -105,7 +105,10 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        expect(body.articles[0].body).not.toEqual(expect.any(String))
+        expect(body.articles.length).toBeGreaterThan(0)
+        body.articles.forEach((article) => {
+          expect(article.body).not.toEqual(expect.any(String))
+        })
       })
   })
   test("200: Articles are sorted by date in descending order by default", () => {
