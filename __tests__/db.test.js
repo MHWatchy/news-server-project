@@ -237,7 +237,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.comment.body).toBe(
           "This is truly a mind-blowing experience"
         )
-        expect(body.comment.votes).toEqual(expect.any(Number))
+        expect(body.comment.votes).toEqual(0)
         expect(body.comment.author).toBe("butter_bridge")
         expect(body.comment.article_id).toBe(2)
         expect(body.comment.created_at).toEqual(expect.any(String))
