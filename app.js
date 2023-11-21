@@ -3,6 +3,7 @@ const {
   handleCustom,
   handlePsql,
   handleServer,
+  handleFoF,
 } = require("./controllers/errors.controllers")
 const { getApi } = require("./controllers/api.controllers")
 const { getTopics } = require("./controllers/topics.controllers")
@@ -26,9 +27,7 @@ app.get("/api/articles/:article_id", getArticleById)
 
 app.get("/api/articles/:article_id/comments", getCommentsForArticle)
 
-app.all("*", (req, res, next) => {
-  res.status(404).send({ msg: "Not found" })
-})
+app.all("*", handleFoF)
 
 app.use(handleCustom)
 app.use(handlePsql)

@@ -198,23 +198,26 @@ describe("/api/articles/:article_id/comments", () => {
   })
   test("400: Bad request id parameter is not a number", () => {
     return request(app)
-    .get("/api/articles/won/comments")
-    .expect(400).then(({body}) => {
-      expect(body.msg).toBe("Bad request")
-    })
+      .get("/api/articles/won/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
   })
   test("404: Id parameter is a valid id but that article doesn't exist", () => {
     return request(app)
-    .get("/api/articles/7002/comments")
-    .expect(404).then(({body}) => {
-      expect(body.msg).toBe("Not found")
-    })
+      .get("/api/articles/7002/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found")
+      })
   })
   test("200: Article exists but has no comments on it", () => {
     return request(app)
-    .get("/api/articles/2/comments")
-    .expect(200).then(({body}) => {
-      expect(body.comments).toEqual([])
-    })
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toEqual([])
+      })
   })
 })

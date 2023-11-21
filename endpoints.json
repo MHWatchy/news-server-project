@@ -61,7 +61,7 @@
     },
     "exampleRequest": {}
   },
-  
+
   "GET /api/articles/:articles_id/comments": {
     "description": "serves an array of comments posted to the article specified via article:id",
     "queries": [],
@@ -79,4 +79,5 @@
     },
     "exampleRequest": {}
   }
+  
 }
