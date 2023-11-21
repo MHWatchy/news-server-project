@@ -96,5 +96,27 @@
       }
     },
     "exampleRequest": { "inc_values": 10 }
+  },
+
+  "POST /api/articles/:articles_id/comments": {
+    "description": "serves a new comment from the input of a new comment added to the database via user input data",
+    "queries": [],
+    "exampleResponse": {
+      "comment": [
+        {
+          "comment_id": 19,
+          "body": "This is truly a mind-blowing experience",
+          "article_id": 2,
+          "author": "butter_bridge",
+          "votes": 0,
+          "created_at": "2023-11-21T12:28:25.698Z"
+        }
+      ]
+    },
+    "exampleRequest": {
+      "username": "butter_bridge",
+      "body": "This is truly a mind-blowing experience"
+    }
   }
 }
+

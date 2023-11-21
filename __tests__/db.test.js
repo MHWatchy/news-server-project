@@ -163,7 +163,7 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
-describe("/api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("200: Returns with an array of comments", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -209,7 +209,7 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/7002/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Not found")
+        expect(body.msg).toBe("Id not found")
       })
   })
   test("200: Article exists but has no comments on it", () => {
@@ -218,6 +218,127 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.comments).toEqual([])
+      })
+  })
+})
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Returns the posted comment", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment.comment_id).toBe(19)
+        expect(body.comment.body).toBe(
+          "This is truly a mind-blowing experience"
+        )
+        expect(body.comment.votes).toBe(0)
+        expect(body.comment.author).toBe("butter_bridge")
+        expect(body.comment.article_id).toBe(2)
+        expect(body.comment.created_at).toEqual(expect.any(String))
+      })
+  })
+  test("404: Returns an error if a valid id is entered but there is no article", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/7002/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Id not found")
+      })
+  })
+  test("400: Returns an error if an invalid id type is entered", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/threehundredandtwo/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error when input object is missing values", () => {
+    const newComment = {
+      username: "butter_bridge",
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error when input object values are the wrong data types", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: 8,
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("201: No error when too many keys are provided in the object given that the required keys are present", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience",
+      age: 1987,
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment.comment_id).toBe(19)
+        expect(body.comment.body).toBe(
+          "This is truly a mind-blowing experience"
+        )
+        expect(body.comment.votes).toEqual(expect.any(Number))
+        expect(body.comment.author).toBe("butter_bridge")
+        expect(body.comment.article_id).toBe(2)
+        expect(body.comment.created_at).toEqual(expect.any(String))
+      })
+  })
+  test("400: Errors out when the wrong keys are gievn without the required keys present", () => {
+    const newComment = {
+      username: "butter_bridge",
+      age: 1987,
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("404: returns an error when username passed can't be found", () => {
+    const newComment = {
+      username: "John Real Kennedy",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username not found")
       })
   })
 })

@@ -12,7 +12,10 @@ const {
   getAllArticles,
   patchArticleById,
 } = require("./controllers/articles.controllers")
-const { getCommentsForArticle } = require("./controllers/comments.controllers")
+const {
+  getCommentsForArticle,
+  postCommentToArticle,
+} = require("./controllers/comments.controllers")
 
 const app = express()
 
@@ -28,7 +31,7 @@ app.get("/api/articles/:article_id", getArticleById)
 
 app.get("/api/articles/:article_id/comments", getCommentsForArticle)
 
-app.post("/api/articles/:article_id/comments")
+app.post("/api/articles/:article_id/comments", postCommentToArticle)
 
 app.patch("/api/articles/:article_id", patchArticleById)
 
