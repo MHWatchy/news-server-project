@@ -342,3 +342,37 @@ describe("POST /api/articles/:article_id/comments", () => {
       })
   })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Comment id deleted", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body.msg).toBe(undefined)
+      })
+  })
+  xtest("404: Returns error when a valid id cannot be found", () => {
+    return request(app).delete("/api/comments/4768219561").expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Id not found")
+    })
+  })
+})
