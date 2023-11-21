@@ -222,7 +222,7 @@ describe("/api/articles/:article_id/comments", () => {
   })
 })
 
-describe.only("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("200: Updates article by the determined increment of votes", () => {
     const input = { inc_votes: 10 }
     return request(app)
