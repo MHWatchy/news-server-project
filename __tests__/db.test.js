@@ -226,7 +226,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   test("201: Posting a comment returns how it looks in the table in the database", () => {
     const newComment = {
       username: "butter_bridge",
-      body: "This is truly a mind-blowing experience"
+      body: "This is truly a mind-blowing experience",
     }
     return request(app)
       .post("/api/articles/2/comments")
@@ -234,7 +234,9 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         expect(body.comment.comment_id).toBe(19)
-        expect(body.comment.body).toBe("This is truly a mind-blowing experience")
+        expect(body.comment.body).toBe(
+          "This is truly a mind-blowing experience"
+        )
         expect(body.comment.votes).toEqual(expect.any(Number))
         expect(body.comment.author).toBe("butter_bridge")
         expect(body.comment.article_id).toBe(2)
@@ -244,7 +246,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   test("400: Returns an error if a valid id is entered but there is no article", () => {
     const newComment = {
       username: "butter_bridge",
-      body: "This is truly a mind-blowing experience"
+      body: "This is truly a mind-blowing experience",
     }
     return request(app)
       .post("/api/articles/7002/comments")
@@ -254,9 +256,22 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
+  test("400: Returns an error if an invalid id type is entered", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/threehundredandtwo/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
   test("400: Returns an error input object is missing values", () => {
     const newComment = {
-      body: "This is truly a mind-blowing experience"
+      body: "This is truly a mind-blowing experience",
     }
     return request(app)
       .post("/api/articles/2/comments")
@@ -268,8 +283,8 @@ describe("POST /api/articles/:article_id/comments", () => {
   })
   test("400: Returns an error input object values are the wrong data types", () => {
     const newComment = {
-      name: "butter_bridge", 
-      body: 8
+      name: "butter_bridge",
+      body: 8,
     }
     return request(app)
       .post("/api/articles/2/comments")
@@ -283,7 +298,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     const newComment = {
       username: "butter_bridge",
       body: "This is truly a mind-blowing experience",
-      age: 1987
+      age: 1987,
     }
     return request(app)
       .post("/api/articles/2/comments")
@@ -291,7 +306,9 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         expect(body.comment.comment_id).toBe(19)
-        expect(body.comment.body).toBe("This is truly a mind-blowing experience")
+        expect(body.comment.body).toBe(
+          "This is truly a mind-blowing experience"
+        )
         expect(body.comment.votes).toEqual(expect.any(Number))
         expect(body.comment.author).toBe("butter_bridge")
         expect(body.comment.article_id).toBe(2)
@@ -300,8 +317,8 @@ describe("POST /api/articles/:article_id/comments", () => {
   })
   test("400: Errors out when the wrong keys are gievn without the required keys present", () => {
     const newComment = {
-      name: "butter_bridge", 
-      age: 1987
+      name: "butter_bridge",
+      age: 1987,
     }
     return request(app)
       .post("/api/articles/2/comments")

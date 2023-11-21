@@ -13,7 +13,10 @@ exports.selectCommentsFromAnArticle = (id) => {
 exports.addNewComment = (inputData, id) => {
   const { body, username } = inputData
   const newComment = [body, username, id, 0]
-  const formattedSQL = format("INSERT INTO comments (body, author, article_id, votes) VALUES %L RETURNING *", [newComment])
+  const formattedSQL = format(
+    "INSERT INTO comments (body, author, article_id, votes) VALUES %L RETURNING *",
+    [newComment]
+  )
   return db.query(formattedSQL).then((data) => {
     return data.rows[0]
   })
