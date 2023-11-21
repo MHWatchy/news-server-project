@@ -13,6 +13,9 @@ exports.selectCommentsFromAnArticle = (id) => {
 exports.addNewComment = (inputData, id) => {
   const { body, username } = inputData
   const newComment = [body, username, id, 0]
+  if (typeof body != "string") {
+    return Promise.reject({ status: 400, msg: "Bad request" })
+  }
   const formattedSQL = format(
     "INSERT INTO comments (body, author, article_id, votes) VALUES %L RETURNING *",
     [newComment]

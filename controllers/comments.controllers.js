@@ -2,7 +2,7 @@ const {
   selectCommentsFromAnArticle,
   addNewComment,
 } = require("../models/comments.models")
-const { checkIdExists } = require("../utils")
+const { checkIdExists, checkUserameExists } = require("../utils")
 
 exports.getCommentsForArticle = (req, res, next) => {
   const { article_id } = req.params
@@ -21,10 +21,13 @@ exports.getCommentsForArticle = (req, res, next) => {
 exports.postCommentToArticle = (req, res, next) => {
   const { body } = req
   const { article_id } = req.params
-  const promises = [addNewComment(body, article_id), checkIdExists(article_id)]
+  const { username } = body
+  promises = [checkIdExists(article_id), checkUserameExists(username)]
   Promise.all(promises)
-    .then((results) => {
-      const comment = results[0]
+    .then(() => {
+      return addNewComment(body, article_id)
+    })
+    .then((comment) => {
       res.status(201).send({ comment })
     })
     .catch(next)

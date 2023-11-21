@@ -209,7 +209,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/7002/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Not found")
+        expect(body.msg).toBe("Id not found")
       })
   })
   test("200: Article exists but has no comments on it", () => {
@@ -223,7 +223,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 })
 
 describe("POST /api/articles/:article_id/comments", () => {
-  test("201: Posting a comment returns how it looks in the table in the database", () => {
+  test("201: Returns the posted comment", () => {
     const newComment = {
       username: "butter_bridge",
       body: "This is truly a mind-blowing experience",
@@ -243,7 +243,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.comment.created_at).toEqual(expect.any(String))
       })
   })
-  test("400: Returns an error if a valid id is entered but there is no article", () => {
+  test("404: Returns an error if a valid id is entered but there is no article", () => {
     const newComment = {
       username: "butter_bridge",
       body: "This is truly a mind-blowing experience",
@@ -251,9 +251,9 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/7002/comments")
       .send(newComment)
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad request")
+        expect(body.msg).toBe("Id not found")
       })
   })
   test("400: Returns an error if an invalid id type is entered", () => {
@@ -269,9 +269,9 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("400: Returns an error input object is missing values", () => {
+  test("400: Returns an error when input object is missing values", () => {
     const newComment = {
-      body: "This is truly a mind-blowing experience",
+      username: "butter_bridge",
     }
     return request(app)
       .post("/api/articles/2/comments")
@@ -281,9 +281,9 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("400: Returns an error input object values are the wrong data types", () => {
+  test("400: Returns an error when input object values are the wrong data types", () => {
     const newComment = {
-      name: "butter_bridge",
+      username: "butter_bridge",
       body: 8,
     }
     return request(app)
@@ -317,7 +317,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   })
   test("400: Errors out when the wrong keys are gievn without the required keys present", () => {
     const newComment = {
-      name: "butter_bridge",
+      username: "butter_bridge",
       age: 1987,
     }
     return request(app)
@@ -326,6 +326,19 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("404: returns an error when username passed can't be found", () => {
+    const newComment = {
+      username: "John Real Kennedy",
+      body: "This is truly a mind-blowing experience",
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username not found")
       })
   })
 })
