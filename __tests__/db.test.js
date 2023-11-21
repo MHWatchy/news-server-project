@@ -361,7 +361,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(input)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Not found")
+        expect(body.msg).toBe("Id not found")
       })
   })
   test("400: Errors out when id type is invalid", () => {
