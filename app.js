@@ -27,7 +27,7 @@ app.get("/api/articles/:article_id", getArticleById)
 
 app.get("/api/articles/:article_id/comments", getCommentsForArticle)
 
-app.post("/api/articles/:article_id/comments", )
+app.post("/api/articles/:article_id/comments")
 
 app.all("*", handleFoF)
 
