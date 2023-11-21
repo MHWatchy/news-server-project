@@ -263,4 +263,34 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
+  test("200: Accepts input object with unnecessary keys given that the required one is present", () => {
+    const input = { inc_votes: 10, somebody: "once", told: "me" }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(10)
+      })
+  })
+  test("400: Return bad request when required key is the wrong data type", () => {
+    const input = { inc_votes: "the world is gonna roll me" }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("200: Returns a vote count decremented", () => {
+    const input = { inc_votes: -10 }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(-10)
+      })
+  })
 })
