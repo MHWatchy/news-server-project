@@ -10,6 +10,7 @@ const { getTopics } = require("./controllers/topics.controllers")
 const {
   getArticleById,
   getAllArticles,
+  patchArticleById,
 } = require("./controllers/articles.controllers")
 const { getCommentsForArticle } = require("./controllers/comments.controllers")
 
@@ -28,6 +29,8 @@ app.get("/api/articles/:article_id", getArticleById)
 app.get("/api/articles/:article_id/comments", getCommentsForArticle)
 
 app.post("/api/articles/:article_id/comments")
+
+app.patch("/api/articles/:article_id", patchArticleById)
 
 app.all("*", handleFoF)
 

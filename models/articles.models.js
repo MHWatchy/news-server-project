@@ -24,3 +24,12 @@ exports.selectAllArticles = () => {
     return data.rows
   })
 }
+
+exports.updateArticle = (id, newInfo) => {
+  let queryStr =
+    "UPDATE articles SET votes = votes + $2 WHERE articles.article_id = $1 RETURNING * "
+  const queryParams = [id, newInfo.inc_votes]
+  return db.query(queryStr, queryParams).then((data) => {
+    return data.rows[0]
+  })
+}
