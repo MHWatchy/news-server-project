@@ -163,7 +163,7 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
-describe("/api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("200: Returns with an array of comments", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -218,6 +218,27 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.comments).toEqual([])
+      })
+  })
+})
+
+describe.only("POST /api/articles/:article_id/comments", () => {
+  test("Posting a comment returns how it looks in the table in the database", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is truly a mind-blowing experience"
+    }
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment.comment_id).toBe(19)
+        expect(body.comment.body).toBe("This is truly a mind-blowing experience")
+        expect(body.comment.votes).toEqual(expect.any(Number))
+        expect(body.comment.author).toBe("butter_bridge")
+        expect(body.comment.article_id).toBe(2)
+        expect(body.comment.created_at).toEqual(expect.any(String))
       })
   })
 })
