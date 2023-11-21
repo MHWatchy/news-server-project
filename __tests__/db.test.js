@@ -369,10 +369,16 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(body.msg).toBe(undefined)
       })
   })
-  xtest("404: Returns error when a valid id cannot be found", () => {
-    return request(app).delete("/api/comments/4768219561").expect(404)
+  test("404: Returns error when a valid id cannot be found", () => {
+    return request(app).delete("/api/comments/4768").expect(404)
     .then(({ body }) => {
       expect(body.msg).toBe("Id not found")
+    })
+  })
+  test("400: Returns error when a invalid id type is input", () => {
+    return request(app).delete("/api/comments/thethingidisagreewith").expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad request")
     })
   })
 })

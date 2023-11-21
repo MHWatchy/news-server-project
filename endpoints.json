@@ -99,5 +99,54 @@
       "username": "butter_bridge",
       "body": "This is truly a mind-blowing experience"
     }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "DELETE /api/comments/:comments_id": {
+    "description": "removes a comment according to an id input by the user",
+    "queries": [],
+    "exampleResponse": {},
+    "exampleRequest": {}
   }
 }
