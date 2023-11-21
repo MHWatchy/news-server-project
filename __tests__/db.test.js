@@ -107,7 +107,7 @@ describe("GET /api/articles", () => {
       .then(({ body }) => {
         expect(body.articles.length).toBeGreaterThan(0)
         body.articles.forEach((article) => {
-          expect(article.body).not.toEqual(expect.any(String))
+          expect(article).not.toHaveProperty("body")
         })
       })
   })
