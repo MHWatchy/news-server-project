@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
   })
 })
 
-describe("GET /api/articles/:id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("200: Returned article matches the input id", () => {
     return request(app)
       .get("/api/articles/1")
@@ -160,5 +160,61 @@ describe("GET /api/articles/:id", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("Not found")
       })
+  })
+})
+
+describe("/api/articles/:article_id/comments", () => {
+  test("200: Returns with an array of comments", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeInstanceOf(Array)
+      })
+  })
+  test("200: Comments possess their required keys, implying they are of the correct article", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(11)
+        body.comments.forEach((comment) => {
+          expect(comment.comment_id).toEqual(expect.any(Number))
+          expect(comment.votes).toEqual(expect.any(Number))
+          expect(comment.created_at).toEqual(expect.any(String))
+          expect(comment.author).toEqual(expect.any(String))
+          expect(comment.body).toEqual(expect.any(String))
+          expect(comment.article_id).toBe(1)
+        })
+      })
+  })
+  test("200: Comments default to being ordered by most recent first (date descending)", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeSortedBy("created_at", { descending: true })
+      })
+  })
+  test("400: Bad request id parameter is not a number", () => {
+    return request(app)
+    .get("/api/articles/won/comments")
+    .expect(400).then(({body}) => {
+      expect(body.msg).toBe("Bad request")
+    })
+  })
+  test("404: Id parameter is a valid id but that article doesn't exist", () => {
+    return request(app)
+    .get("/api/articles/7002/comments")
+    .expect(404).then(({body}) => {
+      expect(body.msg).toBe("Not found")
+    })
+  })
+  test("200: Article exists but has no comments on it", () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200).then(({body}) => {
+      expect(body.comments).toEqual([])
+    })
   })
 })
