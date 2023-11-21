@@ -342,3 +342,76 @@ describe("POST /api/articles/:article_id/comments", () => {
       })
   })
 })
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("201: Updates article by the determined increment of votes", () => {
+    const input = { inc_votes: 10 }
+    return request(app)
+      .patch("/api/articles/3")
+      .send(input)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(10)
+      })
+  })
+  test("404: Errors out when id type is valid but no articles with that id can be found", () => {
+    const input = { inc_votes: 10 }
+    return request(app)
+      .patch("/api/articles/34568")
+      .send(input)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found")
+      })
+  })
+  test("400: Errors out when id type is invalid", () => {
+    const input = { inc_votes: 10 }
+    return request(app)
+      .patch("/api/articles/thatoneabouttheguy")
+      .send(input)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("404: Return bad request when object does not contain required key", () => {
+    const input = { votes_to_add_by: 10 }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("201: Accepts input object with unnecessary keys given that the required one is present", () => {
+    const input = { inc_votes: 10, somebody: "once", told: "me" }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(10)
+      })
+  })
+  test("400: Return bad request when required key is the wrong data type", () => {
+    const input = { inc_votes: "the world is gonna roll me" }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("201: Returns a vote count decremented", () => {
+    const input = { inc_votes: -10 }
+    return request(app)
+      .patch("/api/articles/2")
+      .send(input)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(-10)
+      })
+  })
+})
