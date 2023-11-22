@@ -18,10 +18,12 @@ exports.getAllArticles = (req, res, next) => {
   const { topic } = req.query
   const promises = [selectAllArticles(topic)]
   if (topic) promises.push(checkTopicExists(topic))
-  Promise.all(promises).then((results) => {
-    articles = results[0]
-    res.status(200).send({ articles })
-  }).catch(next)
+  Promise.all(promises)
+    .then((results) => {
+      articles = results[0]
+      res.status(200).send({ articles })
+    })
+    .catch(next)
 }
 
 exports.patchArticleById = (req, res, next) => {
