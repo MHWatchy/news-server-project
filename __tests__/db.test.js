@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
   })
 })
 
-describe("GET /api/articles/:article_id", () => {
+describe.only("GET /api/articles/:article_id", () => {
   test("200: Returned article matches the input id", () => {
     return request(app)
       .get("/api/articles/1")
@@ -159,6 +159,14 @@ describe("GET /api/articles/:article_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Not found")
+      })
+  })
+  test("200: Articles also feature a comment_count value", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.comment_count).toBe(11)
       })
   })
 })
