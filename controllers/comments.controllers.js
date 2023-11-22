@@ -23,7 +23,10 @@ exports.postCommentToArticle = (req, res, next) => {
   const { body } = req
   const { article_id } = req.params
   const { username } = body
-  promises = [checkIdExists(article_id, "articles", "article_id"), checkUserameExists(username)]
+  promises = [
+    checkIdExists(article_id, "articles", "article_id"),
+    checkUserameExists(username),
+  ]
   Promise.all(promises)
     .then(() => {
       return addNewComment(body, article_id)
@@ -37,10 +40,12 @@ exports.postCommentToArticle = (req, res, next) => {
 exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params
   const promises = [checkIdExists(comment_id, "comments", "comment_id")]
-  Promise.all(promises).then(() => {
-    return removeComment(comment_id)
-  })
-  .then((comment) => {
-    res.status(204).send()
-  }).catch(next)
+  Promise.all(promises)
+    .then(() => {
+      return removeComment(comment_id)
+    })
+    .then((comment) => {
+      res.status(204).send()
+    })
+    .catch(next)
 }
