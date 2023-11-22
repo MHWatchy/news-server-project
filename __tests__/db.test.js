@@ -161,6 +161,14 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("Not found")
       })
   })
+  test("200: Articles also feature a comment_count value", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.comment_count).toBe(11)
+      })
+  })
 })
 
 describe("GET /api/articles/:article_id/comments", () => {
@@ -470,4 +478,3 @@ describe("DELETE /api/comments/:comment_id", () => {
       })
   })
 })
-
