@@ -24,3 +24,12 @@ exports.addNewComment = (inputData, id) => {
     return data.rows[0]
   })
 }
+
+exports.removeComment = (id) => {
+  let queryStr =
+    "DELETE FROM comments WHERE comments.comment_id = $1 RETURNING * "
+  const queryParams = [id]
+  return db.query(queryStr, queryParams).then((data) => {
+    return data.rows[0]
+  })
+}

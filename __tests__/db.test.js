@@ -415,3 +415,30 @@ describe("PATCH /api/articles/:article_id", () => {
       })
   })
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Comment id deleted", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body.msg).toBe(undefined)
+      })
+  })
+  test("404: Returns error when a valid id cannot be found", () => {
+    return request(app)
+      .delete("/api/comments/4768")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Id not found")
+      })
+  })
+  test("400: Returns error when a invalid id type is input", () => {
+    return request(app)
+      .delete("/api/comments/thethingidisagreewith")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+})

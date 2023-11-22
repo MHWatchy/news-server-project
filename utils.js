@@ -1,7 +1,8 @@
+const format = require("pg-format")
 const db = require("./db/connection")
 
-exports.checkIdExists = (id) => {
-  const queryStr = "SELECT * FROM articles WHERE articles.article_id = $1 "
+exports.checkIdExists = (id, table, column) => {
+  const queryStr = format("SELECT * FROM %I WHERE %I = $1 ", table, column)
   const queryVals = [id]
   return db.query(queryStr, queryVals).then((data) => {
     if (!data.rows.length) {

@@ -15,6 +15,7 @@ const {
 const {
   getCommentsForArticle,
   postCommentToArticle,
+  deleteCommentById,
 } = require("./controllers/comments.controllers")
 
 const app = express()
@@ -34,6 +35,8 @@ app.get("/api/articles/:article_id/comments", getCommentsForArticle)
 app.post("/api/articles/:article_id/comments", postCommentToArticle)
 
 app.patch("/api/articles/:article_id", patchArticleById)
+
+app.delete("/api/comments/:comment_id", deleteCommentById)
 
 app.all("*", handleFoF)
 

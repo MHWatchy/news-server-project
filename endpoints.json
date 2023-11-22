@@ -79,7 +79,7 @@
     },
     "exampleRequest": {}
   },
-  
+
   "POST /api/articles/:articles_id/comments": {
     "description": "serves a new comment from the input of a new comment added to the database via user input data",
     "queries": [],
@@ -117,5 +117,12 @@
       }
     },
     "exampleRequest": { "inc_values": 10 }
+  },
+
+  "DELETE /api/comments/:comments_id": {
+    "description": "removes a comment according to an id input by the user",
+    "queries": [],
+    "exampleResponse": {},
+    "exampleRequest": {}
   }
 }
