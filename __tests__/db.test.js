@@ -20,7 +20,7 @@ describe("Errors", () => {
 })
 
 describe("GET /api", () => {
-  test("Returns an object containing all api endpoints", () => {
+  test("200: Returns an object containing all api endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -28,7 +28,7 @@ describe("GET /api", () => {
         expect(body.endpoints).toBeInstanceOf(Object)
       })
   })
-  test("Endpoint objects should feature keys for description, queries, request body, and response example", () => {
+  test("200: Endpoint objects should feature keys for description, queries, request body, and response example", () => {
     return request(app)
       .get("/api")
       .expect(200)
