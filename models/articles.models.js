@@ -1,7 +1,8 @@
 const db = require("../db/connection")
 
 exports.selectArticle = (id) => {
-  let queryStr = "SELECT articles.*, cast(count(comments.comment_id) AS INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id "
+  let queryStr =
+    "SELECT articles.*, cast(count(comments.comment_id) AS INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id "
   const queryParams = []
   if (id) {
     queryStr += `WHERE articles.article_id = $1 `

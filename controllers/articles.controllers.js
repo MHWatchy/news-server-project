@@ -23,7 +23,10 @@ exports.getAllArticles = (req, res, next) => {
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params
   const { body } = req
-  const promises = [updateArticle(article_id, body), checkIdExists(article_id, "articles", "article_id")]
+  const promises = [
+    updateArticle(article_id, body),
+    checkIdExists(article_id, "articles", "article_id"),
+  ]
   Promise.all(promises)
     .then((results) => {
       const article = results[0]

@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
   })
 })
 
-describe.only("GET /api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("200: Returned article matches the input id", () => {
     return request(app)
       .get("/api/articles/1")
@@ -478,4 +478,3 @@ describe("DELETE /api/comments/:comment_id", () => {
       })
   })
 })
-
