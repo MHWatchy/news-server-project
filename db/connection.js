@@ -16,4 +16,6 @@ if (ENV === "production") {
   config.max = 2
 }
 
+console.log("Running db on", ENV)
+
 module.exports = new Pool()
