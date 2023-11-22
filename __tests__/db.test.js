@@ -119,6 +119,33 @@ describe("GET /api/articles", () => {
         expect(body.articles).toBeSortedBy("created_at", { descending: true })
       })
   })
+  test("200: Articles can be queried by topic to filter results", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(1)
+        body.articles.forEach((article) => {
+          expect(article.topic).toBe("cats")
+        })
+      })
+  })
+  test("404: Topic query is not in topic database", () => {
+    return request(app)
+      .get("/api/articles?topic=bears")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic not found")
+      })
+  })
+  test("200: Returns empty array when there are no articles for the valid topic", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toEqual([])
+      })
+  })
 })
 
 describe("GET /api/articles/:article_id", () => {

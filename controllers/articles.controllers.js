@@ -3,7 +3,7 @@ const {
   selectAllArticles,
   updateArticle,
 } = require("../models/articles.models")
-const { checkIdExists } = require("../utils")
+const { checkIdExists, checkTopicExists } = require("../utils")
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params
@@ -15,9 +15,15 @@ exports.getArticleById = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-  selectAllArticles().then((articles) => {
-    res.status(200).send({ articles })
-  })
+  const { topic } = req.query
+  const promises = [selectAllArticles(topic)]
+  if (topic) promises.push(checkTopicExists(topic))
+  Promise.all(promises)
+    .then((results) => {
+      articles = results[0]
+      res.status(200).send({ articles })
+    })
+    .catch(next)
 }
 
 exports.patchArticleById = (req, res, next) => {
