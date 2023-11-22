@@ -343,6 +343,34 @@ describe("POST /api/articles/:article_id/comments", () => {
   })
 })
 
+describe("GET /api/users", () => {
+  test("200: Returns an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users.length).toBe(4)
+        expect(body.users).toBeInstanceOf(Array)
+        body.users.forEach((user) => {
+          expect(user).toBeInstanceOf(Object)
+        })
+      })
+  })
+  test("200: Returned user objects all possess their required keys", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users.length).toBe(4)
+        body.users.forEach((user) => {
+          expect(user.username).toEqual(expect.any(String))
+          expect(user.name).toEqual(expect.any(String))
+          expect(user.avatar_url).toEqual(expect.any(String))
+        })
+      })
+  })
+})
+
 describe("PATCH /api/articles/:article_id", () => {
   test("201: Updates article by the determined increment of votes", () => {
     const input = { inc_votes: 10 }
@@ -443,30 +471,3 @@ describe("DELETE /api/comments/:comment_id", () => {
   })
 })
 
-describe("GET /api/users", () => {
-  test("200: Returns an array of user objects", () => {
-    return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.users.length).toBe(4)
-        expect(body.users).toBeInstanceOf(Array)
-        body.users.forEach((user) => {
-          expect(user).toBeInstanceOf(Object)
-        })
-      })
-  })
-  test("200: Returned user objects all possess their required keys", () => {
-    return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.users.length).toBe(4)
-        body.users.forEach((user) => {
-          expect(user.username).toEqual(expect.any(String))
-          expect(user.name).toEqual(expect.any(String))
-          expect(user.avatar_url).toEqual(expect.any(String))
-        })
-      })
-  })
-})
