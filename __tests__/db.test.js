@@ -8,16 +8,16 @@ beforeEach(() => seed(data))
 
 afterAll(() => db.end())
 
-// describe("Errors", () => {
-//   test("404: Unknown url not found", () => {
-//     return request(app)
-//       .get("/api/toothpicks")
-//       .expect(404)
-//       .then(({ body }) => {
-//         expect(body.msg).toBe("Not found")
-//       })
-//   })
-// })
+describe("Errors", () => {
+  test("404: Unknown url not found", () => {
+    return request(app)
+      .get("/api/toothpicks")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found")
+      })
+  })
+})
 
 describe("GET /api", () => {
   test("200: Returns an object containing all api endpoints", () => {
