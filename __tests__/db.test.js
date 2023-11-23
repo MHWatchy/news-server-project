@@ -146,6 +146,14 @@ describe("GET /api/articles", () => {
         expect(body.articles).toEqual([])
       })
   })
+  xtest("200: Accepts a sort_by query to order the articles by", () => {
+    return request(app)
+      .get("/api/articles?sortby=votes")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("votes", { descending: true })
+      })
+  })
 })
 
 describe("GET /api/articles/:article_id", () => {
