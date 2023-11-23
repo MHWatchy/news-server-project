@@ -10,11 +10,7 @@ exports.selectArticle = (id) => {
   }
   queryStr += "GROUP BY articles.article_id "
   return db.query(queryStr, queryParams).then((data) => {
-    if (!data.rows.length) {
-      return Promise.reject({ status: 404, msg: "Not found" })
-    } else {
-      return data.rows[0]
-    }
+    return data.rows[0]
   })
 }
 

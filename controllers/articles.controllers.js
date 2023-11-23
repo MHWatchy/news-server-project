@@ -5,10 +5,13 @@ const {
 } = require("../models/articles.models")
 const { checkIdExists, checkTopicExists } = require("../utils")
 
-//Refactor to use checkIdExists()
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params
-  selectArticle(article_id)
+  const promises = [checkIdExists(article_id, "articles", "article_id")]
+  Promise.all(promises)
+    .then(() => {
+      return selectArticle(article_id)
+    })
     .then((article) => {
       res.status(200).send({ article })
     })
