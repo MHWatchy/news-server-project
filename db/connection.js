@@ -18,4 +18,4 @@ if (ENV === "production") {
 
 console.log("Running db on", ENV)
 
-module.exports = new Pool(config)
+module.exports = new Pool()
