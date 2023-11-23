@@ -41,7 +41,7 @@ app.patch("/api/articles/:article_id", patchArticleById)
 
 app.delete("/api/comments/:comment_id", deleteCommentById)
 
-app.all("*", handleFoF)
+// app.all("*", handleFoF)
 
 app.use(handleCustom)
 app.use(handlePsql)
