@@ -146,6 +146,70 @@ describe("GET /api/articles", () => {
         expect(body.articles).toEqual([])
       })
   })
+  test("200: Accepts an order query to order the articles in asc order", () => {
+    return request(app)
+      .get("/api/articles?order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { ascending: true })
+      })
+  })
+  test("400: Returns an error if user inputs an invalid order", () => {
+    return request(app)
+      .get("/api/articles?order=thebest")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid order")
+      })
+  })
+  test("200: Accepts a sort_by query to order the articles by title", () => {
+    return request(app)
+      .get("/api/articles?sortby=title")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("title", { descending: true })
+      })
+  })
+  test("200: Accepts a sort_by query to order the articles by topic", () => {
+    return request(app)
+      .get("/api/articles?sortby=topic")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("topic", { descending: true })
+      })
+  })
+  test("200: Accepts a sort_by query to order the articles by author", () => {
+    return request(app)
+      .get("/api/articles?sortby=author")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("author", { descending: true })
+      })
+  })
+  test("200: Accepts a sort_by query to order the articles by created_at", () => {
+    return request(app)
+      .get("/api/articles?sortby=created_at")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true })
+      })
+  })
+  test("200: Accepts a sort_by query to order the articles by votes", () => {
+    return request(app)
+      .get("/api/articles?sortby=votes")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("votes", { descending: true })
+      })
+  })
+  test("400: Returns an error if user inputs an invalid sortby", () => {
+    return request(app)
+      .get("/api/articles?sortby=controversial")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid topic")
+      })
+  })
 })
 
 describe("GET /api/articles/:article_id", () => {

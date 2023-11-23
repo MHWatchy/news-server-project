@@ -18,15 +18,26 @@ exports.selectArticle = (id) => {
   })
 }
 
-exports.selectAllArticles = (topic) => {
+exports.selectAllArticles = (sortby = "created_at", order = "desc", topic) => {
   let queryStr =
     "SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, count(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id "
   const queryParams = []
+  const verifiedSortby = ["title", "topic", "author", "created_at", "votes"]
+  const verifiedOrder = ["asc", "desc"]
   if (topic) {
-    queryStr += "WHERE topic = $1 "
     queryParams.push(topic)
+    queryStr += `WHERE topic = $${queryParams.length} `
   }
-  queryStr += "GROUP BY articles.article_id ORDER BY articles.created_at desc "
+
+  if (!verifiedSortby.includes(sortby)) {
+    return Promise.reject({ status: 400, msg: "Invalid topic" })
+  } else {
+    if (!verifiedOrder.includes(order)) {
+      return Promise.reject({ status: 400, msg: "Invalid order" })
+    } else {
+      queryStr += `GROUP BY articles.article_id ORDER BY articles.${sortby} ${order} `
+    }
+  }
   return db.query(queryStr, queryParams).then((data) => {
     return data.rows
   })
