@@ -2,6 +2,7 @@ const {
   selectCommentsFromAnArticle,
   addNewComment,
   removeComment,
+  updateComment,
 } = require("../models/comments.models")
 const { checkIdExists, checkUserameExists } = require("../utils")
 
@@ -46,6 +47,20 @@ exports.deleteCommentById = (req, res, next) => {
     })
     .then(() => {
       res.status(204).send()
+    })
+    .catch(next)
+}
+
+exports.patchCommentById = (req, res, next) => {
+  const { comment_id } = req.params
+  const { inc_votes } = req.body
+  const promises = [checkIdExists(comment_id, "comments", "comment_id")]
+  Promise.all(promises)
+    .then(() => {
+      return updateComment(comment_id, inc_votes)
+    })
+    .then((comment) => {
+      res.status(200).send({ comment })
     })
     .catch(next)
 }

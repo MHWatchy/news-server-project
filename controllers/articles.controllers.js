@@ -5,6 +5,7 @@ const {
 } = require("../models/articles.models")
 const { checkIdExists, checkTopicExists } = require("../utils")
 
+//Refactor to use checkIdExists()
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params
   selectArticle(article_id)
@@ -36,7 +37,7 @@ exports.patchArticleById = (req, res, next) => {
   Promise.all(promises)
     .then((results) => {
       const article = results[0]
-      res.status(201).send({ article })
+      res.status(200).send({ article })
     })
     .catch(next)
 }

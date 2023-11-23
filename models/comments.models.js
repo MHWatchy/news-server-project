@@ -33,3 +33,12 @@ exports.removeComment = (id) => {
     return data.rows[0]
   })
 }
+
+exports.updateComment = (id, votes) => {
+  let queryStr =
+    "UPDATE comments SET votes = votes + $2 WHERE comments.comment_id = $1 RETURNING * "
+  const queryParams = [id, votes]
+  return db.query(queryStr, queryParams).then((data) => {
+    return data.rows[0]
+  })
+}

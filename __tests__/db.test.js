@@ -414,7 +414,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.comment.created_at).toEqual(expect.any(String))
       })
   })
-  test("400: Errors out when the wrong keys are gievn without the required keys present", () => {
+  test("400: Errors out when the wrong keys are given without the required keys present", () => {
     const newComment = {
       username: "butter_bridge",
       age: 1987,
@@ -471,12 +471,12 @@ describe("GET /api/users", () => {
 })
 
 describe("PATCH /api/articles/:article_id", () => {
-  test("201: Updates article by the determined increment of votes", () => {
+  test("200: Updates article by the determined increment of votes", () => {
     const input = { inc_votes: 10 }
     return request(app)
       .patch("/api/articles/3")
       .send(input)
-      .expect(201)
+      .expect(200)
       .then(({ body }) => {
         expect(body.article.votes).toBe(10)
       })
@@ -501,7 +501,7 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("404: Return bad request when object does not contain required key", () => {
+  test("400: Return bad request when object does not contain required key", () => {
     const input = { votes_to_add_by: 10 }
     return request(app)
       .patch("/api/articles/2")
@@ -511,12 +511,12 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("201: Accepts input object with unnecessary keys given that the required one is present", () => {
+  test("200: Accepts input object with unnecessary keys given that the required one is present", () => {
     const input = { inc_votes: 10, somebody: "once", told: "me" }
     return request(app)
       .patch("/api/articles/2")
       .send(input)
-      .expect(201)
+      .expect(200)
       .then(({ body }) => {
         expect(body.article.votes).toBe(10)
       })
@@ -531,12 +531,12 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad request")
       })
   })
-  test("201: Returns a vote count decremented", () => {
+  test("200: Returns a vote count decremented", () => {
     const input = { inc_votes: -10 }
     return request(app)
       .patch("/api/articles/2")
       .send(input)
-      .expect(201)
+      .expect(200)
       .then(({ body }) => {
         expect(body.article.votes).toBe(-10)
       })
@@ -590,6 +590,72 @@ describe("GET /api/users/:username", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("User not found")
+      })
+  })
+})
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Returns with the comment with an updated votes value", () => {
+    return request(app)
+      .patch("/api/comments/2")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment.votes).toBe(15)
+      })
+  })
+  test("404: Errors out when a valid id has no associated comment", () => {
+    return request(app)
+      .patch("/api/comments/96")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Id not found")
+      })
+  })
+  test("400: Errors out when an invalid id is input", () => {
+    return request(app)
+      .patch("/api/comments/real")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Bad request when required key is not provided", () => {
+    return request(app)
+      .patch("/api/comments/2")
+      .send({ more_votes: 1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("200: Accepts inputs with unnecessary keys given the required key is present", () => {
+    return request(app)
+      .patch("/api/comments/2")
+      .send({ inc_votes: 1, i: "ain't", the: "sharpest" })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment.votes).toBe(15)
+      })
+  })
+  test("400: Bad request when required key is the wrong data type", () => {
+    return request(app)
+      .patch("/api/comments/2")
+      .send({ inc_votes: "unless" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("200: Can decrement votes as well", () => {
+    return request(app)
+      .patch("/api/comments/2")
+      .send({ inc_votes: -1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment.votes).toBe(13)
       })
   })
 })
