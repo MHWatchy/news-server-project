@@ -880,3 +880,59 @@ describe("POST /api/articles", () => {
       })
   })
 })
+
+describe("POST /api/topics", () => {
+  test("201: Returns the newly created topic object", () => {
+    const newTopic = {
+      slug: "fog",
+      description: "The fog is coming",
+    }
+    return request(app)
+      .post("/api/topics")
+      .send(newTopic)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.topic).toEqual({
+          description: "The fog is coming",
+          slug: "fog"
+        })
+      })
+  })
+  test("400: Returns an error if topic already exists", () => {
+    const newTopic = {
+      slug: "cats",
+      description: "The fog is coming",
+    }
+    return request(app)
+      .post("/api/topics")
+      .send(newTopic)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error if topic key is missing", () => {
+    const newTopic = {
+      description: "The fog is coming",
+    }
+    return request(app)
+      .post("/api/topics")
+      .send(newTopic)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error if description key is missing", () => {
+    const newTopic = {
+      slug: "fog",
+    }
+    return request(app)
+      .post("/api/topics")
+      .send(newTopic)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+})

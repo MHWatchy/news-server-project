@@ -202,5 +202,20 @@
       "body": "Numbers 10 through 2 are empty because every entry was number 1.",
       "topic": "cats"
     }
+  },
+
+  "POST /api/topics": {
+    "description": "serves a new topic from the input of a new topic created via user input details",
+    "queries": [],
+    "exampleResponse": {
+      "topic": {
+        "slug": "fog",
+        "description": "The fog is coming"
+      }
+    },
+    "exampleRequest": {
+      "slug": "fog",
+      "description": "The fog is coming"
+    }
   }
 }
