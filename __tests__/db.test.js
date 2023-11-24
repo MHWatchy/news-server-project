@@ -659,3 +659,118 @@ describe("PATCH /api/comments/:comment_id", () => {
       })
   })
 })
+
+describe("POST /api/articles", () => {
+  test("201: Returns with the new article", () => {
+    const newArticle = {
+      author: "rogersop",
+      title: "Top 10 little guys",
+      body: "Numbers 10 through 2 are empty because every entry was number 1.",
+      topic: "cats",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article.author).toBe("rogersop")
+        expect(body.article.title).toBe("Top 10 little guys")
+        expect(body.article.body).toBe(
+          "Numbers 10 through 2 are empty because every entry was number 1."
+        )
+        expect(body.article.topic).toBe("cats")
+        expect(body.article.article_img_url).toBe(
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+        )
+        expect(body.article.article_id).toBe(14)
+        expect(body.article.votes).toBe(0)
+        expect(body.article.created_at).toEqual(expect.any(String))
+        expect(body.article.comment_count).toBe(0)
+      })
+  })
+  test("404: Returns an error when author doesn't exist", () => {
+    const newArticle = {
+      author: "the_goobler_woobler",
+      title: "Top 10 little guys",
+      body: "Numbers 10 through 2 are empty because every entry was number 1.",
+      topic: "cats",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Username not found")
+      })
+  })
+  test("400: Returns an error when title is missing", () => {
+    const newArticle = {
+      author: "rogersop",
+      body: "Numbers 10 through 2 are empty because every entry was number 1.",
+      topic: "cats",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error when body is missing", () => {
+    const newArticle = {
+      author: "rogersop",
+      title: "Top 10 little guys",
+      topic: "cats",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("404: Returns an error when topic doesn't exist", () => {
+    const newArticle = {
+      author: "rogersop",
+      title: "Top 10 little guys",
+      body: "Numbers 10 through 2 are empty because every entry was number 1.",
+      topic: "smollen",
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic not found")
+      })
+  })
+  test("201: Returns an article with default article_img_url if that key is missing", () => {
+    const newArticle = {
+      author: "rogersop",
+      title: "Top 10 little guys",
+      body: "Numbers 10 through 2 are empty because every entry was number 1.",
+      topic: "cats",
+    }
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article.article_img_url).toBe(
+          "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
+        )
+      })
+  })
+})

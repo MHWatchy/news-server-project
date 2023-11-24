@@ -1,3 +1,4 @@
+const format = require("pg-format")
 const db = require("../db/connection")
 
 exports.selectArticle = (id) => {
@@ -44,6 +45,26 @@ exports.updateArticle = (id, newInfo) => {
     "UPDATE articles SET votes = votes + $2 WHERE articles.article_id = $1 RETURNING * "
   const queryParams = [id, newInfo.inc_votes]
   return db.query(queryStr, queryParams).then((data) => {
+    return data.rows[0]
+  })
+}
+
+exports.createArticle = (inputData) => {
+  const { author, title, body, topic, article_img_url } = inputData
+  const newArticle = [title, topic, author, body, 0, article_img_url]
+  if (!article_img_url) {
+    newArticle.pop()
+    formattedSql = format(
+      "INSERT INTO articles (title, topic, author, body, votes) VALUES %L RETURNING *",
+      [newArticle]
+    )
+  } else {
+    formattedSql = format(
+      "INSERT INTO articles (title, topic, author, body, votes, article_img_url) VALUES %L RETURNING *",
+      [newArticle]
+    )
+  }
+  return db.query(formattedSql).then((data) => {
     return data.rows[0]
   })
 }
