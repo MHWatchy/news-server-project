@@ -894,7 +894,7 @@ describe("POST /api/topics", () => {
       .then(({ body }) => {
         expect(body.topic).toEqual({
           description: "The fog is coming",
-          slug: "fog"
+          slug: "fog",
         })
       })
   })
@@ -934,5 +934,32 @@ describe("POST /api/topics", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request")
       })
+  })
+})
+
+describe("DELETE /api/articles/:article_id", () => {
+  test("204: Specified article deleted", () => {
+    return request(app)
+      .delete("/api/articles/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body.msg).toBe(undefined)
+      })
+  })
+  test("404: Returns an error if a valid id can't be found", () => {
+    return request(app)
+    .delete("/api/articles/674")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Id not found")
+    })
+  })
+  test("400: Returns an error id type is invalid", () => {
+    return request(app)
+    .delete("/api/articles/lemons")
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request")
+    })
   })
 })

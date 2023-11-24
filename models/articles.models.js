@@ -1,5 +1,6 @@
 const format = require("pg-format")
 const db = require("../db/connection")
+const { removeComment } = require("./comments.models")
 
 exports.selectArticle = (id) => {
   let queryStr =
@@ -82,6 +83,15 @@ exports.createArticle = (inputData) => {
     )
   }
   return db.query(formattedSql).then((data) => {
+    return data.rows[0]
+  })
+}
+
+exports.removeArticle = (id) => {
+  let queryStr =
+    "DELETE FROM articles WHERE articles.article_id = $1 RETURNING *"
+  const queryParams = [id]
+  return db.query(queryStr, queryParams).then((data) => {
     return data.rows[0]
   })
 }

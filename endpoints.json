@@ -127,7 +127,7 @@
     "exampleRequest": { "inc_values": 10 }
   },
 
-  "DELETE /api/comments/:comments_id": {
+  "DELETE /api/comments/:comment_id": {
     "description": "removes a comment according to an id input by the user",
     "queries": [],
     "exampleResponse": {},
@@ -217,5 +217,12 @@
       "slug": "fog",
       "description": "The fog is coming"
     }
+  },
+
+  "DELETE /api/articles/:article_id": {
+    "description": "removes an article according to an id input by the user",
+    "queries": [],
+    "exampleResponse": {},
+    "exampleRequest": {}
   }
 }

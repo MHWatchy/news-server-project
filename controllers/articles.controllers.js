@@ -4,6 +4,7 @@ const {
   selectAllArticles,
   updateArticle,
   createArticle,
+  removeArticle,
 } = require("../models/articles.models")
 const {
   checkIdExists,
@@ -66,6 +67,19 @@ exports.patchArticleById = (req, res, next) => {
     .then((results) => {
       const article = results[0]
       res.status(200).send({ article })
+    })
+    .catch(next)
+}
+
+exports.deleteArticleById = (req, res, next) => {
+  const { article_id } = req.params
+  const promises = [checkIdExists(article_id, "articles", "article_id")]
+  Promise.all(promises)
+    .then(() => {
+      return removeArticle(article_id)
+    })
+    .then(() => {
+      res.status(204).send()
     })
     .catch(next)
 }
