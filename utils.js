@@ -23,10 +23,10 @@ exports.checkUserameExists = (username) => {
 
 exports.checkTopicExists = (topic) => {
   const queryStr = "SELECT * FROM topics WHERE topics.slug = $1 "
-  const queryParams = [topic] 
+  const queryParams = [topic]
   return db.query(queryStr, queryParams).then((data) => {
-    if(!data.rows.length) {
-      return Promise.reject({ status: 404, msg: "Topic not found"})
+    if (!data.rows.length) {
+      return Promise.reject({ status: 404, msg: "Topic not found" })
     }
   })
 }
