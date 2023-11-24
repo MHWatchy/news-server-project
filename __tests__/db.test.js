@@ -948,18 +948,18 @@ describe("DELETE /api/articles/:article_id", () => {
   })
   test("404: Returns an error if a valid id can't be found", () => {
     return request(app)
-    .delete("/api/articles/674")
-    .expect(404)
-    .then(({body}) => {
-      expect(body.msg).toBe("Id not found")
-    })
+      .delete("/api/articles/674")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Id not found")
+      })
   })
   test("400: Returns an error id type is invalid", () => {
     return request(app)
-    .delete("/api/articles/lemons")
-    .expect(400)
-    .then(({body}) => {
-      expect(body.msg).toBe("Bad request")
-    })
+      .delete("/api/articles/lemons")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
   })
 })
