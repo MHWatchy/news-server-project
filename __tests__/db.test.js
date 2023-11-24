@@ -330,7 +330,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   })
   test("200: Comments possess their required keys, implying they are of the correct article", () => {
     return request(app)
-      .get("/api/articles/1/comments")
+      .get("/api/articles/1/comments?limit=20")
       .expect(200)
       .then(({ body }) => {
         expect(body.comments.length).toBe(11)
@@ -371,6 +371,55 @@ describe("GET /api/articles/:article_id/comments", () => {
   test("200: Article exists but has no comments on it", () => {
     return request(app)
       .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toEqual([])
+      })
+  })
+  test("200: Accepts a limit query to limit the amount of comments on a page", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(5)
+      })
+  })
+  test("200: Default limit query is set to 10", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(10)
+      })
+  })
+  test("200: Accepts a p (page) query to determine which page to return", () => {
+    return request(app)
+      .get("/api/articles/1/comments?p=2&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBe(1)
+        expect(body.comments[0].comment_id).toBe(9)
+      })
+  })
+  test("400: Returns an error if limit is the wrong data type", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=some")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error if p (page) is the wrong data type", () => {
+    return request(app)
+      .get("/api/articles/1/comments?p=acouplein")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("200: Returns an empty array if p (page) is a valid data type but doesn't have any content", () => {
+    return request(app)
+      .get("/api/articles/1/comments?p=3")
       .expect(200)
       .then(({ body }) => {
         expect(body.comments).toEqual([])

@@ -8,8 +8,9 @@ const { checkIdExists, checkUserameExists } = require("../utils")
 
 exports.getCommentsForArticle = (req, res, next) => {
   const { article_id } = req.params
+  const { limit, p } = req.query
   const promises = [
-    selectCommentsFromAnArticle(article_id),
+    selectCommentsFromAnArticle(article_id, limit, p),
     checkIdExists(article_id, "articles", "article_id"),
   ]
   Promise.all(promises)
