@@ -15,11 +15,24 @@ exports.selectArticle = (id) => {
   })
 }
 
-exports.selectAllArticles = (sortby = "created_at", order = "desc", topic) => {
+exports.selectAllArticles = (
+  sortby = "created_at",
+  order = "desc",
+  topic,
+  limit = 10,
+  page = 1
+) => {
   let queryStr =
-    "SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, count(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id "
+    "SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, count(comments.comment_id) AS comment_count, CAST(count(*) OVER () AS INT) AS total_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id "
   const queryParams = []
-  const verifiedSortby = ["title", "topic", "author", "created_at", "votes"]
+  const verifiedSortby = [
+    "title",
+    "topic",
+    "author",
+    "created_at",
+    "votes",
+    "article_id",
+  ]
   const verifiedOrder = ["asc", "desc"]
   if (topic) {
     queryParams.push(topic)
@@ -35,6 +48,10 @@ exports.selectAllArticles = (sortby = "created_at", order = "desc", topic) => {
       queryStr += `GROUP BY articles.article_id ORDER BY articles.${sortby} ${order} `
     }
   }
+
+  queryParams.push(limit)
+  queryStr += `LIMIT $${queryParams.length} OFFSET ${(page - 1) * limit} `
+
   return db.query(queryStr, queryParams).then((data) => {
     return data.rows
   })

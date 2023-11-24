@@ -1,3 +1,4 @@
+const articles = require("../db/data/test-data/articles")
 const {
   selectArticle,
   selectAllArticles,
@@ -43,12 +44,12 @@ exports.postArticle = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-  const { sortby, order, topic } = req.query
-  const promises = [selectAllArticles(sortby, order, topic)]
+  const { sortby, order, topic, limit, p } = req.query
+  const promises = [selectAllArticles(sortby, order, topic, limit, p)]
   if (topic) promises.push(checkTopicExists(topic))
   Promise.all(promises)
     .then((results) => {
-      articles = results[0]
+      const articles = results[0]
       res.status(200).send({ articles })
     })
     .catch(next)

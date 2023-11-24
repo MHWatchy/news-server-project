@@ -210,6 +210,63 @@ describe("GET /api/articles", () => {
         expect(body.msg).toBe("Invalid topic")
       })
   })
+  test("200: Accepts a limit query to limit the amount of articles on a page", () => {
+    return request(app)
+      .get("/api/articles?limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(5)
+      })
+  })
+  test("200: Default limit query is set to 10", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(10)
+      })
+  })
+  test("200: Accepts a p (page) query to determine which page to return", () => {
+    return request(app)
+      .get("/api/articles?sortby=article_id&p=2&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(3)
+        expect(body.articles[0].article_id).toBe(11)
+      })
+  })
+  test("400: Returns an error if limit is the wrong data type", () => {
+    return request(app)
+      .get("/api/articles?limit=some")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("400: Returns an error if p (page) is the wrong data type", () => {
+    return request(app)
+      .get("/api/articles?p=acouplein")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request")
+      })
+  })
+  test("200: Returns an empty array if p (page) is a valid data type but doesn't have any content", () => {
+    return request(app)
+      .get("/api/articles?p=3")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toEqual([])
+      })
+  })
+  test("200: Returns an additional value for total articles disregarding limit", () => {
+    return request(app)
+      .get("/api/articles?limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles[0].total_count).toBe(13)
+      })
+  })
 })
 
 describe("GET /api/articles/:article_id", () => {

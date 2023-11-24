@@ -30,7 +30,9 @@
     "queries": [
       { "sortby": ["title", "topic", "author", "created_at", "votes"] },
       { "order": ["asc", "desc"] },
-      "topic"
+      { "topic": ["mitch", "cats", "paper"] },
+      { "limit": "Integer" },
+      { "p": "Integer" }
     ],
     "exampleResponse": {
       "articles": [
@@ -41,7 +43,8 @@
           "body": "Text from the article..",
           "created_at": "2018-05-30T15:59:13.341Z",
           "votes": 0,
-          "comment_count": 6
+          "comment_count": 6,
+          "total_count": 13
         }
       ]
     },
@@ -176,7 +179,7 @@
       "inc_votes": 1
     }
   },
-  
+
   "POST /api/articles": {
     "description": "serves an article constructed via values from user input",
     "queries": [],
