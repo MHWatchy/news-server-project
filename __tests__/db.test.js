@@ -207,7 +207,7 @@ describe("GET /api/articles", () => {
       .get("/api/articles?sortby=controversial")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid topic")
+        expect(body.msg).toBe("Invalid sort by")
       })
   })
   test("200: Accepts a limit query to limit the amount of articles on a page", () => {

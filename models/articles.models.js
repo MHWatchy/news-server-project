@@ -41,7 +41,7 @@ exports.selectAllArticles = (
   }
 
   if (!verifiedSortby.includes(sortby)) {
-    return Promise.reject({ status: 400, msg: "Invalid topic" })
+    return Promise.reject({ status: 400, msg: "Invalid sort by" })
   } else {
     if (!verifiedOrder.includes(order)) {
       return Promise.reject({ status: 400, msg: "Invalid order" })
